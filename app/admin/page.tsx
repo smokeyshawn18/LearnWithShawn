@@ -3,6 +3,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { books } from "@/lib/bookData";
+import { ClerkUser } from "@/types/clerk"; // 👈 Import your custom type
 
 // Admin Panel Component
 export default async function AdminPanel() {
@@ -20,7 +21,7 @@ export default async function AdminPanel() {
     },
   });
 
-  const users = await response.json();
+  const users: ClerkUser[] = await response.json();
 
   // Function to grant book access to users
   async function grantBookAccess(formData: FormData) {
@@ -29,7 +30,6 @@ export default async function AdminPanel() {
     const userId = formData.get("userId") as string;
     const bookSlug = formData.get("bookSlug") as string;
 
-    // Fetch the current user's metadata from Clerk
     const response = await fetch(`https://api.clerk.com/v1/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
@@ -37,19 +37,17 @@ export default async function AdminPanel() {
       },
     });
 
-    const user = await response.json();
+    const user: ClerkUser = await response.json();
     const currentHasPurchased = Array.isArray(
       user.private_metadata?.hasPurchased
     )
       ? user.private_metadata.hasPurchased
       : [];
 
-    // Add the new bookSlug to the existing hasPurchased array, avoiding duplicates
     const updatedHasPurchased = [
       ...new Set([...currentHasPurchased, bookSlug]),
     ];
 
-    // Update the user's metadata with the new hasPurchased array
     await fetch(`https://api.clerk.com/v1/users/${userId}/metadata`, {
       method: "PATCH",
       headers: {
@@ -73,7 +71,6 @@ export default async function AdminPanel() {
     const userId = formData.get("userId") as string;
     const bookSlug = formData.get("bookSlug") as string;
 
-    // Fetch the current user's metadata from Clerk
     const response = await fetch(`https://api.clerk.com/v1/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
@@ -81,19 +78,17 @@ export default async function AdminPanel() {
       },
     });
 
-    const user = await response.json();
+    const user: ClerkUser = await response.json();
     const currentHasPurchased = Array.isArray(
       user.private_metadata?.hasPurchased
     )
       ? user.private_metadata.hasPurchased
       : [];
 
-    // Remove the bookSlug from the hasPurchased array
     const updatedHasPurchased = currentHasPurchased.filter(
-      (slug: string) => slug !== bookSlug
+      (slug) => slug !== bookSlug
     );
 
-    // Update the user's metadata with the new hasPurchased array
     await fetch(`https://api.clerk.com/v1/users/${userId}/metadata`, {
       method: "PATCH",
       headers: {
@@ -115,13 +110,11 @@ export default async function AdminPanel() {
       <h1 className="text-2xl font-bold mb-4">Admin Panel</h1>
       <p className="mb-6">Grant or Remove permissions for eBook access.</p>
 
-      {/* Loop through each book and display options to grant/remove permissions in a table */}
       {books.map((book) => (
         <div key={book.slug} className="mb-6">
           <h2 className="text-xl font-bold mb-4">{book.title}</h2>
           <p>{book.description}</p>
 
-          {/* Table Layout for Grant/Remove Permission */}
           <table className="min-w-full table-auto mt-6">
             <thead>
               <tr>
@@ -132,15 +125,13 @@ export default async function AdminPanel() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user: any) => {
-                // Ensure that hasPurchased is an array
+              {users.map((user) => {
                 const hasPurchased = Array.isArray(
                   user.private_metadata?.hasPurchased
                 )
                   ? user.private_metadata.hasPurchased
                   : [];
 
-                // Check if the user already has this book
                 const hasBook = hasPurchased.includes(book.slug);
 
                 return (

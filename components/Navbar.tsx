@@ -28,9 +28,9 @@ export function Navbar() {
   return (
     <nav className="border-b bg-white shadow-md sticky top-0">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <a href="/" className="text-2xl font-bold text-black">
+        <Link href="/" className="text-2xl font-bold text-black">
           LearnWithShawn
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">

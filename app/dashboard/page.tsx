@@ -1,9 +1,13 @@
-import { useUser } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
-export default function Dashboard() {
-  const { user } = useUser();
+export default async function Dashboard() {
+  const { userId } = await auth();
+  if (!userId) {
+    return <p>Access Denied - Please sign in</p>;
+  }
 
-  if (user?.emailAddresses[0].emailAddress !== "admin@example.com") {
+  const user = await currentUser();
+  if (!user || user.emailAddresses[0].emailAddress !== "admin@example.com") {
     return <p>Access Denied</p>;
   }
 

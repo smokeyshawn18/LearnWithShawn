@@ -10,3 +10,13 @@ declare module "@clerk/nextjs" {
     };
   }
 }
+
+// types/clerk.d.ts
+export interface ClerkUser {
+  id: string;
+  email_addresses: { email_address: string }[];
+  image_url: string;
+  private_metadata: {
+    hasPurchased?: string[];
+  };
+}

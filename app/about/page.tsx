@@ -26,7 +26,7 @@ const page = () => {
             learning web development should be accessible and practical.
           </p>
           <p className="text-muted-foreground leading-relaxed">
-            Whether you're just getting started or want to solidify your
+            Whether you are just getting started or want to solidify your
             foundation, our eBooks and resources are designed with simplicity
             and clarity in mind.
           </p>

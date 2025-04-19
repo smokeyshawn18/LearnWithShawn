@@ -19,7 +19,7 @@ export default async function EbookPage() {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <h1 className="text-2xl font-bold">No Books Purchased</h1>
-        <p>You haven't purchased any eBooks yet. Please visit the store.</p>
+        <p>You haven not purchased any eBooks yet. Please visit the store.</p>
       </div>
     );
   }
