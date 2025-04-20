@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 import Footer from "@/components/Footer";
+import InstallPopup from "@/components/InstallPopUp";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,7 +38,10 @@ export default function RootLayout({
         </head>
         <body className={inter.className}>
           <Navbar />
-          <main>{children}</main>
+          <main>
+            {children}
+            <InstallPopup />
+          </main>
           <Footer />
         </body>
       </html>
